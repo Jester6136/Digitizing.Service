@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Library.DataAccessLayer\Library.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\Library.DataModel\Library.DataModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Library.Common">
+      <HintPath>..\..\Library.Common\Library.Common.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
