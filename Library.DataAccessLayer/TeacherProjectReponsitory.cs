@@ -19,7 +19,7 @@ namespace Library.DataAccessLayer
             _teacher = teacher;
         }
         public List<TeacherProjectModel> Search(int pageIndex, int pageSize
-            , out long total, string course_id_rcd, string class_id_rcd)
+            , out long total, string student_rcd, int project_type)
         {
             total = 0;
             try
@@ -28,8 +28,8 @@ namespace Library.DataAccessLayer
                 {
                     _dbHelper.CreateInParameter("@page_index", DbType.Int32, pageIndex),
                     _dbHelper.CreateInParameter("@page_size", DbType.Int32, pageSize),
-                    _dbHelper.CreateInParameter("@course_id_rcd" ,DbType.String, course_id_rcd),
-                    _dbHelper.CreateInParameter("@class_id_rcd", DbType.String, class_id_rcd),
+                    _dbHelper.CreateInParameter("@student_rcd" ,DbType.String, student_rcd),
+                    _dbHelper.CreateInParameter("@project_type" ,DbType.Int32, project_type),
 
                     _dbHelper.CreateOutParameter("@OUT_TOTAL_ROW", DbType.Int32, 10),
                     _dbHelper.CreateOutParameter("@OUT_ERR_CD", DbType.Int32, 10),
@@ -43,13 +43,7 @@ namespace Library.DataAccessLayer
                 if (result.Output["OUT_TOTAL_ROW"] + "" != "")
                     total = Convert.ToInt32(result.Output["OUT_TOTAL_ROW"]);
 
-                List<TeacherProjectModel> list = new List<TeacherProjectModel>();
-                list = result.Value;
-
-                foreach (TeacherProjectModel item in list)
-                    item.teacher_information = _teacher.GetById(item.teacher_rcd);
-
-                return list;
+                return result.Value;
             }
             catch (Exception ex)
             {

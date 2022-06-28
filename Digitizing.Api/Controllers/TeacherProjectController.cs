@@ -38,15 +38,15 @@ namespace Digitizing.Api.Cms.Controllers
             {
                 var page = int.Parse(formData["page"].ToString());
                 var pageSize = int.Parse(formData["pageSize"].ToString());
-                var course_id_rcd = formData.Keys.Contains("selectedSubject") ? Convert.ToString(formData["selectedSubject"]) : "";
-                var class_id_rcd = formData.Keys.Contains("class_id_rcd") ? Convert.ToString(formData["class_id_rcd"]) : "";
+                var student_rcd = CurrentUserName;
+                int project_type = int.Parse(formData["project_type"].ToString());
 
                 long total = 0;
-                var data = await Task.FromResult(_teacherProjectBUS.Search(page, pageSize, 
-                    out total, course_id_rcd, class_id_rcd));
+                var data = await Task.FromResult(_teacherProjectBUS.Search(page, pageSize, out total,
+                    student_rcd, project_type));
                 response.TotalItems = total;
                 response.Data = data;
-                response.Page = page;
+                response.Page = page;   
                 response.PageSize = pageSize;
             }
             catch (Exception ex)

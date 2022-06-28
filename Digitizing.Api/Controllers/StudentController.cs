@@ -14,6 +14,7 @@ using System.Linq;
 using System.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Digitizing.Api.Cms.Controllers
 {
@@ -29,9 +30,9 @@ namespace Digitizing.Api.Cms.Controllers
             _env = env ?? throw new ArgumentNullException(nameof(env));
             _studentBUS = studentBUS;
         }
-        [Route("update-student")]
+        [Route("update")]
         [HttpPost]
-        public async Task<ResponseMessage<StudentModel>> UpdateWebsiteTag([FromBody] StudentModel model)
+        public async Task<ResponseMessage<StudentModel>> UpdateStudent([FromBody] StudentModel model)
         {
             var response = new ResponseMessage<StudentModel>();
             try
@@ -54,14 +55,15 @@ namespace Digitizing.Api.Cms.Controllers
             }
             return response;
         }
-        [Route("get-by-id/{id}")]
+        [Route("get-by-id")]
         [HttpGet]
-        public async Task<ResponseMessage<StudentModel>> GetById(string id)
+        public async Task<ResponseMessage<StudentModel>> GetById()
         {
             var response = new ResponseMessage<StudentModel>();
+            var student_rcd = CurrentUserName;
             try
             {
-                response.Data = await Task.FromResult(_studentBUS.GetById(id));
+                response.Data = await Task.FromResult(_studentBUS.GetById(student_rcd));
             }
             catch (Exception ex)
             {
@@ -69,6 +71,25 @@ namespace Digitizing.Api.Cms.Controllers
             }
             return response;
         }
+
+
+        [Route("get-provinces")]
+        [HttpGet]
+        public async Task<ResponseMessage<IList<DropdownOptionModel>>> GetProvinces()
+        {
+            var response = new ResponseMessage<IList<DropdownOptionModel>>();
+            try
+            {
+                response.Data = await Task.FromResult(_studentBUS.GetProvinces(CurrentLanguage));
+            }
+            catch (Exception ex)
+            {
+                response.MessageCode = ex.Message;
+            }
+            return response;
+        }
+
+
         [Route("get-districts-by-id/{provinces_rcd}")]
         [HttpGet]
         public async Task<ResponseMessage<IList<DropdownOptionModel>>> GetDistricts(string provinces_rcd)
@@ -99,6 +120,35 @@ namespace Digitizing.Api.Cms.Controllers
             }
             return response;
         }
+
+        [Route("upload")]
+        [HttpPost, DisableRequestSizeLimit]
+        public async Task<IActionResult> Upload(IFormFile file)
+        {
+            try
+            {
+                if (file.Length > 0 && file.FileName.Contains(".doc"))
+                {
+                    var filename = file.FileName;
+                    var webRoot = _env.ContentRootPath;
+                    var filePath = Path.Combine(webRoot + "/Upload/", filename);
+                    using ( var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+                    return Ok(new { MessageCodes.UpdateSuccessfully });
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { MessageCodes.UpdateSuccessfully });
+            }
+        }
+
 
     }
 }

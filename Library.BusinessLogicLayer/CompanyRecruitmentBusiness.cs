@@ -15,9 +15,9 @@ namespace Library.BusinessLogicLayer
             _res = res;
         }
 
-        public List<PreCompanyRecruitmentModel> Search(int pageIndex, int pageSize, out long total, string company_rcd, string recruitment_job, string recruitment_title)
+        public List<PreCompanyRecruitmentModel> Search(int pageIndex, int pageSize, out long total,string student_rcd, string company_rcd, string recruitment_job)
         {
-            return _res.Search(pageIndex, pageSize, out total, company_rcd, recruitment_job, recruitment_title);
+            return _res.Search(pageIndex, pageSize, out total,student_rcd, company_rcd, recruitment_job);
         }
         public List<DropdownOptionModel> GetListDropdown()
         {

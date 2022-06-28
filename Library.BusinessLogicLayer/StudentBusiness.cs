@@ -26,6 +26,10 @@ namespace Library.BusinessLogicLayer
         {
             return _res.GetDistricts(lang, provinces_rcd);
         }
+        public List<DropdownOptionModel> GetProvinces(char lang)
+        {
+            return _res.GetProvinces(lang);
+        }
         public List<DropdownOptionModel> GetWards(char lang, string districts_rcd)
         {
             return _res.GetWards(lang, districts_rcd);

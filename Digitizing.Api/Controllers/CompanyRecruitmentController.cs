@@ -39,12 +39,11 @@ namespace Digitizing.Api.Cms.Controllers
             {
                 var page = int.Parse(formData["page"].ToString());
                 var pageSize = int.Parse(formData["pageSize"].ToString());
+                var student_rcd = CurrentUserName;
                 var company_rcd = formData.Keys.Contains("company_rcd") ? Convert.ToString(formData["company_rcd"]) : "";
                 var recruitment_job = formData.Keys.Contains("recruitment_job") ? Convert.ToString(formData["recruitment_job"]) : "";
-                var recruitment_title = formData.Keys.Contains("recruitment_title") ? Convert.ToString(formData["recruitment_title"]) : "";
-
                 long total = 0;
-                var data = await Task.FromResult(_companyrecruitmentBUS.Search(page, pageSize, out total, company_rcd, recruitment_job, recruitment_title));
+                var data = await Task.FromResult(_companyrecruitmentBUS.Search(page, pageSize, out total,student_rcd, company_rcd, recruitment_job));
                 response.TotalItems = total;
                 response.Data = data;
                 response.Page = page;

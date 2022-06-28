@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Library.Common.Response;
 using Library.Common.Message;
 using Library.Common.Helper;
@@ -17,29 +17,29 @@ using System.Threading.Tasks;
 
 namespace Digitizing.Api.Cms.Controllers
 {
-    [Route("api/job-candidate")]
-    public class JobCandidateController : BaseController
+    [Route("api/project_register")]
+    public class ProjectRegisterController : BaseController
     {
         private IWebHostEnvironment _env;
-        private IJobCandidateBusiness _jobcandidateBUS;
-        public JobCandidateController(ICacheProvider redis, IConfiguration configuration,
+        private IProjectRegisterBusiness _projectregisterBUS;
+        public ProjectRegisterController(ICacheProvider redis, IConfiguration configuration,
             IHttpContextAccessor httpContextAccessor, IWebHostEnvironment env,
-            IJobCandidateBusiness jobcandidateBUS) : base(redis, configuration, httpContextAccessor)
+            IProjectRegisterBusiness projectregisterBUS) : base(redis, configuration, httpContextAccessor)
         {
             _env = env ?? throw new ArgumentNullException(nameof(env));
-            _jobcandidateBUS = jobcandidateBUS;
+            _projectregisterBUS = projectregisterBUS;
         }
 
         [Route("create")]
         [HttpPost]
-        public async Task<ResponseMessage<JobCandidateModel>> Create([FromBody] JobCandidateModel model)
+        public async Task<ResponseMessage<ProjectRegisterModel>> Create([FromBody] ProjectRegisterModel model)
         {
-            var response = new ResponseMessage<JobCandidateModel>();
+            var response = new ResponseMessage<ProjectRegisterModel>();
             try
             {
                 model.student_rcd = CurrentUserName;
                 model.created_by_user_id = CurrentUserId;
-                var resultBUS = await Task.FromResult(_jobcandidateBUS.Create(model));
+                var resultBUS = await Task.FromResult(_projectregisterBUS.Create(model));
                 if (resultBUS)
                 {
                     response.Data = model;
@@ -58,79 +58,26 @@ namespace Digitizing.Api.Cms.Controllers
             return response;
         }
 
-
-        [Route("update")]
-        [HttpPost]
-        public async Task<ResponseMessage<JobCandidateModel>> Update([FromBody] JobCandidateModel model)
-        {
-            var response = new ResponseMessage<JobCandidateModel>();
-            try
-            {
-                model.student_rcd = CurrentUserName;
-                model.lu_user_id = CurrentUserId;
-                var resultBUS = await Task.FromResult(_jobcandidateBUS.Update(model));
-                if (resultBUS)
-                {
-                    response.Data = model;
-                    response.MessageCode = MessageCodes.UpdateSuccessfully;
-                }
-                else
-                {
-                    response.MessageCode = MessageCodes.UpdateFail;
-                }
-            }
-            catch (Exception ex)
-            {
-                response.MessageCode = ex.Message;
-            }
-            return response;
-        }
-
         [Route("delete")]
         [HttpPost]
-        public async Task<ResponseMessage<JobCandidateModel>> Delete([FromBody] JobCandidateModel model)
+        public async Task<ResponseMessage<ProjectRegisterModel>> Delete([FromBody] ProjectRegisterModel model)
         {
-            var response = new ResponseMessage<JobCandidateModel>();
+            var response = new ResponseMessage<ProjectRegisterModel>();
             try
             {
                 model.student_rcd = CurrentUserName;
                 model.lu_user_id = CurrentUserId;
-                var resultBUS = await Task.FromResult(_jobcandidateBUS.Delete(model));
+                var resultBUS = await Task.FromResult(_projectregisterBUS.Delete(model));
                 if (resultBUS)
                 {
                     response.Data = model;
-                    response.MessageCode = MessageCodes.UpdateSuccessfully;
+                    response.MessageCode = MessageCodes.CreateSuccessfully;
                 }
                 else
                 {
-                    response.MessageCode = MessageCodes.UpdateFail;
+                    response.MessageCode = MessageCodes.CreateFail;
                 }
-            }
-            catch (Exception ex)
-            {
-                response.MessageCode = ex.Message;
-            }
-            return response;
-        }
 
-        [Route("update-report-src")]
-        [HttpPost]
-        public async Task<ResponseMessage<JobCandidateModel>> UpdateReportSrc([FromBody] JobCandidateModel model)
-        {
-            var response = new ResponseMessage<JobCandidateModel>();
-            try
-            {
-                model.lu_user_id = CurrentUserId;
-                var resultBUS = await Task.FromResult(_jobcandidateBUS.UpdateReportSrc(model));
-                if (resultBUS)
-                {
-                    response.Data = model;
-                    response.MessageCode = MessageCodes.UpdateSuccessfully;
-                }
-                else
-                {
-                    response.MessageCode = MessageCodes.UpdateFail;
-                }
             }
             catch (Exception ex)
             {
@@ -141,13 +88,40 @@ namespace Digitizing.Api.Cms.Controllers
 
         [HttpGet]
         [Route("get-by-id")]
-        public async Task<ResponseMessage<JobCandidateModel>> GetById()
+        public async Task<ResponseMessage<ProjectRegisterModel>> GetById(int project_type)
         {
-            var response = new ResponseMessage<JobCandidateModel>();
+            var response = new ResponseMessage<ProjectRegisterModel>();
             var student_rcd = CurrentUserName;
             try
             {
-                response.Data = await Task.FromResult(_jobcandidateBUS.GetById(student_rcd));
+                response.Data = await Task.FromResult(_projectregisterBUS.GetById(student_rcd,project_type));
+            }
+            catch (Exception ex)
+            {
+                response.MessageCode = ex.Message;
+            }
+            return response;
+        }
+
+        [Route("update")]
+        [HttpPost]
+        public async Task<ResponseMessage<ProjectRegisterModel>> Update([FromBody] ProjectRegisterModel model)
+        {
+            var response = new ResponseMessage<ProjectRegisterModel>();
+            try
+            {
+                var student_rcd = CurrentUserName;
+                model.lu_user_id = CurrentUserId;
+                var resultBUS = await Task.FromResult(_projectregisterBUS.Update(model));
+                if (resultBUS)
+                {
+                    response.Data = model;
+                    response.MessageCode = MessageCodes.UpdateSuccessfully;
+                }
+                else
+                {
+                    response.MessageCode = MessageCodes.UpdateFail;
+                }
             }
             catch (Exception ex)
             {

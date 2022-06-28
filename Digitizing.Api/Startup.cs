@@ -72,9 +72,19 @@ namespace Digitizing.Api.Cms
             services.AddTransient<ICompanyRecruitmentBusiness, CompanyRecruitmentBusiness>();
             services.AddTransient<ICompanyRecruitmentReponsitory, CompanyRecruitmentReponsitory>();
             
-            //module show company to register
+   
             services.AddTransient<IJobCandidateBusiness, JobCandidateBusiness>();
             services.AddTransient<IJobCandidateReponsitory, JobCandidateReponsitory>();
+
+
+            services.AddTransient<IStudentRecruitmentReportBusiness, StudentRecruitmentReportBusiness>();
+            services.AddTransient<IStudentRecruitmentReportReponsitory, StudentRecruitmentReportWeeklyReponsitory>();
+
+            services.AddTransient<IProjectRegisterBusiness, ProjectRegisterBusiness>();
+            services.AddTransient<IProjectRegisterReponsitory, ProjectRegisterReponsitory>();
+
+            services.AddTransient<IProjectReportBusiness, ProjectReportBusiness>();
+            services.AddTransient<IProjectReportReponsitory, ProjectReportReponsitory>();
 
 
             services.AddSwaggerGen(c =>

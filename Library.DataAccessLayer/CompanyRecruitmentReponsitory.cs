@@ -17,7 +17,7 @@ namespace Library.DataAccessLayer
         }
 
         public List<PreCompanyRecruitmentModel> Search(int pageIndex, int pageSize,
-            out long total, string company_rcd, string recruitment_job, string recruitment_title)
+            out long total,string student_rcd, string company_rcd, string recruitment_job)
         {
             total = 0;
             try
@@ -26,9 +26,9 @@ namespace Library.DataAccessLayer
                 {
                     _dbHelper.CreateInParameter("@page_index", DbType.Int32, pageIndex),
                     _dbHelper.CreateInParameter("@page_size", DbType.Int32,  pageSize),
+                    _dbHelper.CreateInParameter("@student_rcd" ,DbType.String,student_rcd),
                     _dbHelper.CreateInParameter("@company_rcd" ,DbType.String,company_rcd),
                     _dbHelper.CreateInParameter("@recruitment_job" ,DbType.String,recruitment_job),
-                    _dbHelper.CreateInParameter("@recruitment_title" ,DbType.String,recruitment_title),
                     _dbHelper.CreateOutParameter("@OUT_TOTAL_ROW", DbType.Int32, 10),
                     _dbHelper.CreateOutParameter("@OUT_ERR_CD", DbType.Int32, 10),
                     _dbHelper.CreateOutParameter("@OUT_ERR_MSG", DbType.String, 255)

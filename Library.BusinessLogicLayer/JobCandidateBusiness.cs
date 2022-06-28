@@ -24,5 +24,18 @@ namespace Library.BusinessLogicLayer
         {
             return _res.Update(model);
         }
+        public bool Delete(JobCandidateModel model)
+        {
+            return _res.Delete(model);
+        }
+        public JobCandidateModel GetById(string student_rcd)
+        {
+            return _res.GetById(student_rcd);
+        }
+
+        public bool UpdateReportSrc(JobCandidateModel model)
+        {
+            return _res.UpdateReportSrc(model);
+        }
     }
 }

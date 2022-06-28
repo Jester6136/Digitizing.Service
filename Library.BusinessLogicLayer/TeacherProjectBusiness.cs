@@ -15,9 +15,9 @@ namespace Library.BusinessLogicLayer
             _res = res;
         }
         public List<TeacherProjectModel> Search(int pageIndex, int pageSize
-           , out long total, string course_id_rcd, string class_id_rcd)
+            , out long total, string student_rcd, int project_type)
         {
-            return _res.Search(pageIndex, pageSize, out total, course_id_rcd, class_id_rcd);
+            return _res.Search(pageIndex, pageSize, out total, student_rcd,project_type);
         }
     }
 }
